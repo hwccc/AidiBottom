@@ -1,0 +1,3 @@
+rootProject.name='AidiBottom'
+include ':app'
+include ':aidlbottom'
