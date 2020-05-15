@@ -1,6 +1,6 @@
 package com.hwc.aidlbottom.listener;
 
-import aidl.module.bottom.BottomMessage;
+import com.hwc.aidlbottom.bean.MessageBean;
 
 /**
  * @author hwc
@@ -10,8 +10,8 @@ public interface OnBottomMessageListener {
     /**
      * 底层消息回调
      *
-     * @param bottomMessage
+     * @param messageBean
      */
-    void message(BottomMessage bottomMessage);
+    void message(MessageBean messageBean);
 
 }

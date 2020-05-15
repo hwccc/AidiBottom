@@ -3,14 +3,19 @@ package com.hwc.aidlbottom.utils;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.hwc.aidlbottom.bean.MessageBean;
 import com.hwc.aidlbottom.listener.OnBottomMessageListener;
 
 import org.qiyi.video.svg.Andromeda;
+import org.qiyi.video.svg.broadcast.BroadcastUtil;
 import org.qiyi.video.svg.callback.BaseCallback;
 import org.qiyi.video.svg.config.DispatcherConstants;
+import org.qiyi.video.svg.listener.OnBroadcastListener;
 import org.qiyi.video.svg.transfer.RemoteTransfer;
+import org.qiyi.video.svg.utils.BaseProcessUtil;
 
 import aidl.module.bottom.BottomMessage;
 import aidl.module.bottom.IBottomMessenger;
@@ -19,6 +24,8 @@ import aidl.module.bottom.IBottomMessenger;
  * @author hwc
  */
 public class BottomMessengerUtil extends BaseProcessUtil {
+
+    private OnBottomMessageListener onMessageListener;
 
     private volatile static BottomMessengerUtil instance;
 
@@ -38,12 +45,39 @@ public class BottomMessengerUtil extends BaseProcessUtil {
     }
 
 
+    @Override
+    public <T extends IBinder> void registerSpeechRemoteService(Class serviceClass, T stubBinder) {
+        registerRemoteService(true, DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE, serviceClass, stubBinder);
+    }
+
+    @Override
+    public void startMonitorRestart() {
+        super.startMonitorRestart();
+        BroadcastUtil.getInstance().setOnBroadcastListener(new OnBroadcastListener() {
+            @Override
+            public void onExtra(String s) {
+                if (TextUtils.equals(s, DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE)) {
+                    if (onMessageListener != null) {
+                        register(onMessageListener);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void stopMonitorRestart() {
+        super.stopMonitorRestart();
+        BroadcastUtil.getInstance().setOnBroadcastListener(null);
+    }
+
     /**
      * 注册监听底层发送上来的消息事件
-     * @param onBottomNewsListener
+     *
+     * @param onBottomMessageListener
      * @return
      */
-    public boolean register(final OnBottomMessageListener onBottomNewsListener) {
+    public boolean register(final OnBottomMessageListener onBottomMessageListener) {
         if (null == context) {
             Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
             return false;
@@ -54,6 +88,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        this.onMessageListener = onBottomMessageListener;
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -61,13 +96,11 @@ public class BottomMessengerUtil extends BaseProcessUtil {
 
                     @Override
                     public void onSucceed(Bundle result) {
-                        BottomMessage bottomMessage = new BottomMessage();
-                        bottomMessage.bottomBytes = result.getByteArray("bottomBytes");
-                        bottomMessage.bottomByte = result.getByte("bottomByte");
-                        if (onBottomNewsListener != null) {
-                            onBottomNewsListener.message(bottomMessage);
+                        MessageBean messageBean = (MessageBean) result.getSerializable("MessageBean");
+                        if (onMessageListener != null) {
+                            onMessageListener.message(messageBean);
                         }
-                        org.qiyi.video.svg.log.Logger.d("got remote service with callback in other process(:banana),bottomMessage: " + bottomMessage);
+                        org.qiyi.video.svg.log.Logger.d("got remote service with callback in other process(:banana),messageBean: " + messageBean);
                     }
 
                     @Override
@@ -85,9 +118,11 @@ public class BottomMessengerUtil extends BaseProcessUtil {
 
     /**
      * 注销事件
+     *
      * @return
      */
     public boolean unregister() {
+        onMessageListener = null;
         if (null == context) {
             Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
             return false;
@@ -112,6 +147,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
 
     /**
      * 发送消息
+     *
      * @param bottomMessage
      * @return
      */
