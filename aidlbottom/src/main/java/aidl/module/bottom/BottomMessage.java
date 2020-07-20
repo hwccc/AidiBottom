@@ -13,11 +13,6 @@ import java.util.Arrays;
 public class BottomMessage implements Parcelable {
 
     /**
-     * 是否为旋钮操作
-     */
-    public boolean isKnob;
-
-    /**
      * byte底层消息
      */
     public byte bottomByte;
@@ -27,15 +22,19 @@ public class BottomMessage implements Parcelable {
      */
     public byte[] bottomBytes;
 
+    /**
+     * 底层消息类型
+     */
+    public String msgType;
 
     public BottomMessage() {
 
     }
 
     protected BottomMessage(Parcel in) {
-        isKnob = in.readByte() != 0;
         bottomByte = in.readByte();
         bottomBytes = in.createByteArray();
+        msgType = in.readString();
     }
 
     public static final Creator<BottomMessage> CREATOR = new Creator<BottomMessage>() {
@@ -57,9 +56,9 @@ public class BottomMessage implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeByte((byte) (isKnob ? 1 : 0));
         parcel.writeByte(bottomByte);
         parcel.writeByteArray(bottomBytes);
+        parcel.writeString(msgType);
     }
 
     @Override
@@ -67,6 +66,7 @@ public class BottomMessage implements Parcelable {
         return "BottomMessage{" +
                 "bottomByte=" + bottomByte +
                 ", bottomBytes=" + Arrays.toString(bottomBytes) +
+                ", msgType='" + msgType + '\'' +
                 '}';
     }
 }

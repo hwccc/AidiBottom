@@ -1,6 +1,21 @@
 package com.hwc.aidlbottom.config;
 
-public interface FocusConfigure {
+public interface BottomConfigure {
+
+    /**
+     * 旋钮事件
+     */
+    String TYPE_KNOB = "type_Knob";
+
+    /**
+     * 按键事件
+     */
+    String TYPE_BUTTON = "type_button";
+
+    /**
+     * 停止麦克风事件
+     */
+    String TYPE_STOP_MIC = "type_stop_mic";
 
     /**
      * 按上键
