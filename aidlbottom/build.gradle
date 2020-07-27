@@ -6,7 +6,7 @@ apply plugin: 'maven'
 // 2.maven-信息
 ext {// ext is a gradle closure allowing the declaration of global properties
     PUBLISH_GROUP_ID = 'com.github.hwccc'
-    PUBLISH_ARTIFACT_ID = 'AidlBottom'
+    PUBLISH_ARTIFACT_ID = 'AidiBottom'
     // 本地的版本以10开头，防止与线上版本号一致，导致引入线上版本
     PUBLISH_VERSION = '10.0.0'
 }
@@ -65,5 +65,5 @@ dependencies {
     // 本地
 //    api 'com.github.hwccc:AndromedaApp:10.0.0'
     //  云端
-    api 'com.github.hwccc:AndromedaApp:0.0.2'
+    api 'com.github.hwccc:AndromedaApp:0.0.3'
 }
