@@ -432,6 +432,11 @@ public interface BottomConfigure {
      */
     byte FOCUS_KEYCODE_SCREEN_PRESS_UP = (byte) 0x31;
 
+    /**
+     * 获取didiplay版本号
+     */
+    byte MJ_BOX_GET_DIDIPLAY_VERSION = (byte) 0x32;
+
 
     /**
      * 关闭键盘下发消息
@@ -459,6 +464,10 @@ public interface BottomConfigure {
      */
     byte MJ_BOX_SIMULATE_KEYSTROKES = (byte) 0xED;
 
+    /**
+     * 打开返回键拦截事件
+     */
+    byte MJ_BOX_OPEN_BACK_INTERCEPT = (byte) 0xEA;
 
     /**
      * 关闭返回键拦截事件
@@ -466,8 +475,8 @@ public interface BottomConfigure {
     byte MJ_BOX_CLOSE_BACK_INTERCEPT = (byte) 0xE9;
 
     /**
-     * 打开返回键拦截事件
+     * 执行adb命令
      */
-    byte MJ_BOX_OPEN_BACK_INTERCEPT = (byte) 0xEA;
+    byte MJ_BOX_EXECUTE_ADB_COMMAND= (byte) 0xE8;
 
 }
