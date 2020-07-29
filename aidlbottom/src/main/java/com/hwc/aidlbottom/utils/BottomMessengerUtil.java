@@ -116,6 +116,52 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         return false;
     }
 
+
+    /**
+     * 查询获取didiplay版本号
+     *
+     * @param onBottomMessageListener
+     * @return
+     */
+    public boolean searchDidiPlayVerion(final OnBottomMessageListener onBottomMessageListener) {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return false;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return false;
+        }
+        this.onMessageListener = onBottomMessageListener;
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.searchDidiPlayVerion(new BaseCallback() {
+
+                    @Override
+                    public void onSucceed(Bundle result) {
+                        int didiPlayVersion = result.getInt("didiPlayVersion");
+                        if (onMessageListener != null) {
+                            onMessageListener.searchDidiPlayVersion(didiPlayVersion);
+                        }
+                        org.qiyi.video.svg.log.Logger.d("got remote service with callback in other process(:banana),messageBean: " + didiPlayVersion);
+                    }
+
+                    @Override
+                    public void onFailed(String reason) {
+                        org.qiyi.video.svg.log.Logger.e("buyAppleOnNet failed,reason:" + reason);
+                    }
+                });
+                return true;
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     /**
      * 注销事件
      *

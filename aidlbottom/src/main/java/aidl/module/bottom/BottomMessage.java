@@ -13,6 +13,11 @@ import java.util.Arrays;
 public class BottomMessage implements Parcelable {
 
     /**
+     * 底层消息类型
+     */
+    public String msgType;
+
+    /**
      * byte底层消息
      */
     public byte bottomByte;
@@ -22,10 +27,6 @@ public class BottomMessage implements Parcelable {
      */
     public byte[] bottomBytes;
 
-    /**
-     * 底层消息类型
-     */
-    public String msgType;
 
     public BottomMessage() {
 

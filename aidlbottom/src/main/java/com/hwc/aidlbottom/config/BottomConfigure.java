@@ -18,6 +18,11 @@ public interface BottomConfigure {
     String TYPE_STOP_MIC = "type_stop_mic";
 
     /**
+     * 执行adb命令
+     */
+    String TYPE_EXECUTE_ADB_COMMAND = "type_execute_adb_command";
+
+    /**
      * 按上键
      */
     int FOCUS_KEYCODE_DPAD_UP = 3;

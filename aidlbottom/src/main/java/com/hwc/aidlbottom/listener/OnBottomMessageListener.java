@@ -12,6 +12,17 @@ public interface OnBottomMessageListener {
      *
      * @param messageBean
      */
-    void message(MessageBean messageBean);
+    default void message(MessageBean messageBean) {
+
+    }
+
+    /**
+     * 查询didiplay版本号
+     *
+     * @param didiPlayVersion
+     */
+    default void searchDidiPlayVersion(int didiPlayVersion) {
+
+    }
 
 }
