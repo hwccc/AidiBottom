@@ -331,9 +331,14 @@ public interface BottomConfigure {
     byte MJ_BOX_KEYCODE_HANG_UP = (byte) 0xF3;
 
     /**
+     * 电话名称
+     */
+    byte MJ_BOX_KEYCODE_CALLPHONE_NAME = (byte) 0xE8;
+
+    /**
      * 拨打电话
      */
-    //byte MJ_BOX_KEYCODE_CALL_UP = (byte) 0xF2;
+    byte MJ_BOX_KEYCODE_CALL_UP = (byte) 0xF2;
 
 
     /**
@@ -482,6 +487,6 @@ public interface BottomConfigure {
     /**
      * 执行adb命令
      */
-    byte MJ_BOX_EXECUTE_ADB_COMMAND= (byte) 0xE8;
+    byte MJ_BOX_EXECUTE_ADB_COMMAND= (byte) 0xE7;
 
 }
