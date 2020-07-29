@@ -9,7 +9,7 @@ interface IBottomMessenger {
 
     int unregister();
 
-    int searchDidiPlayVerion(IPCCallback callback);
-
     int send(in BottomMessage bottomMessage);
+
+    int getDidiPlayVersion();
 }
