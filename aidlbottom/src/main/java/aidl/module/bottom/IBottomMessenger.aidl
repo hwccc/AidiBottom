@@ -12,4 +12,10 @@ interface IBottomMessenger {
     int send(in BottomMessage bottomMessage);
 
     int getDidiPlayVersion();
+
+    int switchMicrophoneChannel();
+
+    int restoreChannel();
+
+    boolean isStartSystemMic();
 }

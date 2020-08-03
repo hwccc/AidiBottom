@@ -202,4 +202,89 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         return false;
     }
 
+
+    /**
+     * 系统是否启动麦克风消息
+     *
+     * @return
+     */
+    public boolean isStartSystemMic() {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return false;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return false;
+        }
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.isStartSystemMic();
+                return true;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 切换麦克风声道
+     *
+     * @return
+     */
+    public boolean switchMicrophoneChannel() {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return false;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return false;
+        }
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.switchMicrophoneChannel();
+                return true;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 恢复声道
+     *
+     * @return
+     */
+    public boolean restoreChannel() {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return false;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return false;
+        }
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.restoreChannel();
+                return true;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
 }
