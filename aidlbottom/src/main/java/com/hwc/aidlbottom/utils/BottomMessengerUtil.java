@@ -222,8 +222,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
-                buyApple.isStartSystemMic();
-                return true;
+                return buyApple.isStartSystemMic();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -250,8 +249,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
-                buyApple.switchMicrophoneChannel();
-                return true;
+                return buyApple.switchMicrophoneChannel();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -278,7 +276,37 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
-                buyApple.restoreChannel();
+                return buyApple.restoreChannel();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 设置按键学习
+     * true为打开
+     * false为关闭
+     *
+     * @return
+     */
+    public boolean setLearningButtons(boolean isLearningButtons) {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return false;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return false;
+        }
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.setLearningButtons(isLearningButtons);
                 return true;
             } catch (RemoteException e) {
                 e.printStackTrace();

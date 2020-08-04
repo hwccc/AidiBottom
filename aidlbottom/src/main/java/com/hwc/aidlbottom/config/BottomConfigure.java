@@ -156,6 +156,12 @@ public interface BottomConfigure {
 
 
     /********************* 喵驾盒子底层发起协议 *********************/
+
+    /**
+     * 按键未知消息学习、匹配
+     */
+    byte MIUDRIVE_BUTTONS_LEARNING = (byte) 0x00;
+
     /**
      * 按上键
      */
@@ -487,6 +493,6 @@ public interface BottomConfigure {
     /**
      * 执行adb命令
      */
-    byte MJ_BOX_EXECUTE_ADB_COMMAND= (byte) 0xE7;
+    byte MJ_BOX_EXECUTE_ADB_COMMAND = (byte) 0xE7;
 
 }

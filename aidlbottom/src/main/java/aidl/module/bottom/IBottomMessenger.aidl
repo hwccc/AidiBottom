@@ -13,9 +13,11 @@ interface IBottomMessenger {
 
     int getDidiPlayVersion();
 
-    int switchMicrophoneChannel();
+    boolean switchMicrophoneChannel();
 
-    int restoreChannel();
+    boolean restoreChannel();
 
     boolean isStartSystemMic();
+
+    boolean setLearningButtons(boolean isLearningButtons);
 }
