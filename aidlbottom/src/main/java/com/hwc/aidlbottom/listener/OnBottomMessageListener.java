@@ -31,6 +31,8 @@ public interface OnBottomMessageListener {
      *
      * @param bytes
      */
-    void onMessage(byte[] bytes);
+    default void onMessage(byte[] bytes) {
+
+    }
 
 }
