@@ -96,7 +96,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @param onBottomMessageListener
      * @return
      */
-    public boolean register(long timeTag, final OnBottomMessageListener onBottomMessageListener) {
+    private boolean register(long timeTag, final OnBottomMessageListener onBottomMessageListener) {
         if (null == context) {
             Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
             return false;
