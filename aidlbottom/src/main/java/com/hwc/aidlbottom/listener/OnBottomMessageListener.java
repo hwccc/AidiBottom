@@ -1,28 +1,36 @@
 package com.hwc.aidlbottom.listener;
 
-import com.hwc.aidlbottom.bean.MessageBean;
-
 /**
  * @author hwc
  */
 public interface OnBottomMessageListener {
 
+
     /**
-     * 底层消息回调
+     * 按键消息
      *
-     * @param messageBean
+     * @param bytes
      */
-    default void message(MessageBean messageBean) {
+    default void onButtonsMessage(byte[] bytes) {
 
     }
 
+
     /**
-     * 查询didiplay版本号
+     * 按键学习消息
      *
-     * @param didiPlayVersion
+     * @param bytes
      */
-    default void searchDidiPlayVersion(int didiPlayVersion) {
+    default void onButtonsLearningMessage(byte[] bytes) {
 
     }
+
+
+    /**
+     * 其它底层消息（非按键、非按键学习消息）
+     *
+     * @param bytes
+     */
+    void onMessage(byte[] bytes);
 
 }

@@ -3,22 +3,22 @@ package com.hwc.aidlbottom.config;
 public interface BottomConfigure {
 
     /**
-     * 旋钮事件
+     * 按键类型
      */
-    String TYPE_KNOB = "type_Knob";
+    String TYPE_BUTTONS = "type_buttons";
 
     /**
-     * 按键事件
+     * 按键类型
      */
-    String TYPE_BUTTON = "type_button";
+    String TYPE_BUTTONS_LEARNING = "type_buttons_learning";
 
     /**
-     * 停止麦克风事件
+     * 停止麦克风类型
      */
     String TYPE_STOP_MIC = "type_stop_mic";
 
     /**
-     * 执行adb命令
+     * 执行adb命令类型
      */
     String TYPE_EXECUTE_ADB_COMMAND = "type_execute_adb_command";
 

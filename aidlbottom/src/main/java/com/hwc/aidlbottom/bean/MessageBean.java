@@ -11,9 +11,9 @@ import java.util.Arrays;
 public class MessageBean implements Serializable {
 
     /**
-     * 是否为旋钮操作
+     * 底层消息类型
      */
-    public boolean isKnob;
+    public String msgType;
 
     /**
      * byte底层消息
@@ -33,7 +33,7 @@ public class MessageBean implements Serializable {
     @Override
     public String toString() {
         return "MessageBean{" +
-                "isKnob=" + isKnob +
+                "msgType='" + msgType + '\'' +
                 ", bottomByte=" + bottomByte +
                 ", bottomBytes=" + Arrays.toString(bottomBytes) +
                 '}';

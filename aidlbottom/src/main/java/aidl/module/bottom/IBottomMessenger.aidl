@@ -5,9 +5,9 @@ import org.qiyi.video.svg.IPCCallback;
 
 interface IBottomMessenger {
 
-    int register(IPCCallback callback);
+    int register(long timeTag, IPCCallback callback);
 
-    int unregister();
+    int unregister(long timeTag);
 
     int send(in BottomMessage bottomMessage);
 
@@ -20,4 +20,8 @@ interface IBottomMessenger {
     boolean isStartSystemMic();
 
     boolean setLearningButtons(boolean isLearningButtons);
+
+    boolean isConnectOriginalVehicleSuccess();
+
+    byte[] getCarModel();
 }
