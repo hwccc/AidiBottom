@@ -437,10 +437,10 @@ public class BottomMessengerUtil extends BaseProcessUtil {
     /**
      * 发送按键事件至底层
      */
-    public void sendKeystrokesData(byte bottomByte) {
+    public void sendKeystrokesData(int keyCode) {
         BottomMessage bottomMessage = new BottomMessage();
         bottomMessage.msgType = BottomConfigure.TYPE_BUTTONS;
-        bottomMessage.bottomByte = bottomByte;
+        bottomMessage.bottomByte = (byte) keyCode;
         send(bottomMessage);
     }
 
