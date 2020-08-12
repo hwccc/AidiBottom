@@ -409,5 +409,61 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         return null;
     }
 
+    /**
+     * 执行adb命令
+     */
+    public void sendAdbCommand(String adbCommand) {
+        if (!TextUtils.isEmpty(adbCommand)) {
+            BottomMessage bottomMessage = new BottomMessage();
+            bottomMessage.msgType = BottomConfigure.TYPE_EXECUTE_ADB_COMMAND;
+            bottomMessage.bottomBytes = adbCommand.getBytes();
+            send(bottomMessage);
+        }
+    }
 
+    /**
+     * 发送整串的数组至底层
+     *
+     * @param bottomBytes
+     */
+    public void sendNativeSocketData(byte[] bottomBytes) {
+        if (bottomBytes != null) {
+            BottomMessage bottomMessage = new BottomMessage();
+            bottomMessage.bottomBytes = bottomBytes;
+            send(bottomMessage);
+        }
+    }
+
+    /**
+     * 发送按键事件至底层
+     */
+    public void sendKeystrokesData(byte bottomByte) {
+        BottomMessage bottomMessage = new BottomMessage();
+        bottomMessage.msgType = BottomConfigure.TYPE_BUTTONS;
+        bottomMessage.bottomByte = bottomByte;
+        send(bottomMessage);
+    }
+
+    /**
+     * 发送麦克风停止事件
+     *
+     * @param bottomByte
+     */
+    public void sendStopMicData(byte bottomByte) {
+        BottomMessage bottomMessage = new BottomMessage();
+        bottomMessage.msgType = BottomConfigure.TYPE_STOP_MIC;
+        bottomMessage.bottomByte = bottomByte;
+        send(bottomMessage);
+    }
+
+    /**
+     * 发送消息标准的byte字节
+     *
+     * @param bottomByte
+     */
+    public void sendSocketData(byte bottomByte) {
+        BottomMessage bottomMessage = new BottomMessage();
+        bottomMessage.bottomByte = bottomByte;
+        send(bottomMessage);
+    }
 }
