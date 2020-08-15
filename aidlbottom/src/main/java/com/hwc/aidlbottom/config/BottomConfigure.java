@@ -157,10 +157,17 @@ public interface BottomConfigure {
 
     /********************* 喵驾盒子底层发起协议 *********************/
 
+    /******************************** TODO didiplay-->apk ******************************/
+
     /**
      * 按键未知消息学习、匹配
      */
     byte MIUDRIVE_BUTTONS_LEARNING = (byte) 0x00;
+
+    /**
+     * 返回键消息
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_BACK_KEY = (byte) 0x01;
 
     /**
      * 按上键
@@ -188,14 +195,69 @@ public interface BottomConfigure {
     byte MJ_BOX_FOCUS_KEYCODE_ENTER = 0x06;
 
     /**
+     * 向右边旋转
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_ROTATE_RIGHT = 0x07;
+
+    /**
      * 向左边旋转
      */
     byte MJ_BOX_FOCUS_KEYCODE_ROTATE_LEFT = 0x08;
 
     /**
-     * 向右边旋转
+     * 上一曲
      */
-    byte MJ_BOX_FOCUS_KEYCODE_ROTATE_RIGHT = 0x07;
+    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_PREVIOUS = 0x09;
+
+    /**
+     * 下一曲
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_NEXT = 0x0A;
+
+    /**
+     * 暂停、播放
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_PLAY_PAUSE = 0x0B;
+
+    /**
+     * 长按
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_LONG_PRESS = 0x0C;
+
+    /**
+     * 向右边旋转多格
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_ROTATE_MULTI_LATTICE_RIGHT = 0x0D;
+
+    /**
+     * 向左边旋转多格
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_ROTATE_MULTI_LATTICE_LEFT = 0x0E;
+
+    /**
+     * 打开或关闭Siri
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_OPEN_CLOSE_SIRI = 0x0F;
+
+    /**
+     * 播放
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_PLAY = 0x10;
+
+    /**
+     * 暂停
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_PAUSE = 0x11;
+
+    /**
+     * 关闭Siri
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_CLOSE_SIRI = 0x12;
+
+    /**
+     * MIC切换成功
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_SWITCH_MIC_SUCESS = (byte) 0x13;
 
     /**
      * 向上边滑动
@@ -218,160 +280,6 @@ public interface BottomConfigure {
      */
     byte MJ_BOX_FOCUS_KEYCODE_SLIDE_RIGHT = 0x17;
 
-
-    /**
-     * 长按
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_LONG_PRESS = 0x0C;
-
-    /**
-     * 向左边旋转多格
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_ROTATE_MULTI_LATTICE_LEFT = 0x0E;
-
-    /**
-     * 向右边旋转多格
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_ROTATE_MULTI_LATTICE_RIGHT = 0x0D;
-
-    /**
-     * 打开或关闭Siri
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_OPEN_CLOSE_SIRI = 0x0F;
-
-    /**
-     * 关闭Siri
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_CLOSE_SIRI = 0x12;
-
-    /**
-     * 播放
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_PLAY = 0x10;
-
-    /**
-     * 暂停
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_PAUSE = 0x11;
-
-    /**
-     * 上一曲
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_PREVIOUS = 0x09;
-
-    /**
-     * 下一曲
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_NEXT = 0x0A;
-
-    /**
-     * 暂停、播放
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_MEDIA_PLAY_PAUSE = 0x0B;
-
-
-    /**
-     * 车机型号
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_CAR_MODE = (byte) 0xFD;
-
-    /**
-     * 进入地图
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_GET_INTO_MAP = (byte) 0xFC;
-
-    /**
-     * 退出地图
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_SIGN_OUT_MAP = (byte) 0xFB;
-
-
-    /**
-     * 开始语音识别
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_START_SPEECH = (byte) 0xFA;
-
-    /**
-     * 结束语音识别
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_STOP_SPEECH = (byte) 0xF9;
-
-    /**
-     * 播放事件
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_PLAY_ACTION = (byte) 0xF8;
-
-    /**
-     * MIC切换成功
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_SWITCH_MIC_SUCESS = (byte) 0x13;
-
-    /**
-     * 导航播报开始(进行混音操作)
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_NAVI_START_TTS = (byte) 0xF7;
-
-    /**
-     * 导航播报结束（关闭混音操作）
-     */
-    byte MJ_BOX_FOCUS_KEYCODE_NAVI_STOP_TTS = (byte) 0xF6;
-
-    /**
-     * 返回原车
-     */
-    byte MJ_BOX_KEYCODE_RETURN_ORIGINAL_CAR = (byte) 0xFE;
-
-    /**
-     * 接听来电响铃
-     */
-    byte MJ_BOX_KEYCODE_ANSWER_INCOMING_RING = (byte) 0xF5;
-
-    /**
-     * 接听来电通话
-     */
-    byte MJ_BOX_KEYCODE_ANSWER_INCOMING_CALL = (byte) 0xF4;
-
-    /**
-     * 挂断
-     */
-    byte MJ_BOX_KEYCODE_HANG_UP = (byte) 0xF3;
-
-    /**
-     * 电话名称
-     */
-    byte MJ_BOX_KEYCODE_CALLPHONE_NAME = (byte) 0xE8;
-
-    /**
-     * 拨打电话
-     */
-    byte MJ_BOX_KEYCODE_CALL_UP = (byte) 0xF2;
-
-
-    /**
-     * 立即开始播放更新
-     */
-    byte MJ_BOX_KEYCODE_START_NOW_PLAYING_UPDATES = (byte) 0x00;
-
-    /**
-     * 立即停止播放更新
-     */
-    byte MJ_BOX_KEYCODE_STOP_NOW_PLAYING_UPDATES = (byte) 0x02;
-
-
-    /**
-     * 语音识别结束声音和屏幕焦点恢复以前状态
-     */
-    byte MIUDRIVE_NO_HANDLE_SOUND_FOCUS = (byte) 0x00;
-
-    /**
-     * 语音识别结束声音焦点在喵驾，屏幕恢复以前状态
-     */
-    byte MIUDRIVE_NEED_HANDLE_SOUND_FOCUS = (byte) 0x01;
-
-    /**
-     * 语音识别结束屏幕焦点在喵驾，声音恢复以前状态
-     */
-    byte INTERFACE_SWITCH_MIUDRIVE = (byte) 0x02;
 
     /**
      * 屏幕焦点在喵驾
@@ -397,11 +305,6 @@ public interface BottomConfigure {
      * 不能返回原车
      */
     byte BACK_MIUDRIVE_NO_RETURN_TO_ORIGINAL_VEHICLE = 0x22;
-
-    /**
-     * 喵驾发送至底层暂停
-     */
-    byte MIUDRIVE_TO_VEHICLE_PAUSE = (byte) 0xF1;
 
     /**
      * 接听电话
@@ -453,6 +356,84 @@ public interface BottomConfigure {
      */
     byte MJ_BOX_GET_DIDIPLAY_VERSION = (byte) 0x32;
 
+    /**
+     * 车机型号
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_CAR_MODE = (byte) 0xFD;
+
+
+    /******************************** TODO apk-->didiplay******************************/
+
+    /**
+     * 返回原车
+     */
+    byte MJ_BOX_KEYCODE_RETURN_ORIGINAL_CAR = (byte) 0xFE;
+
+    /**
+     * 进入地图
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_GET_INTO_MAP = (byte) 0xFC;
+
+    /**
+     * 退出地图
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_SIGN_OUT_MAP = (byte) 0xFB;
+
+
+    /**
+     * 开始语音识别
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_START_SPEECH = (byte) 0xFA;
+
+    /**
+     * 结束语音识别
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_STOP_SPEECH = (byte) 0xF9;
+
+    /**
+     * 播放事件
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_PLAY_ACTION = (byte) 0xF8;
+
+    /**
+     * 导航播报开始(进行混音操作)
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_NAVI_START_TTS = (byte) 0xF7;
+
+    /**
+     * 导航播报结束（关闭混音操作）
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_NAVI_STOP_TTS = (byte) 0xF6;
+
+    /**
+     * 接听来电响铃
+     */
+    byte MJ_BOX_KEYCODE_ANSWER_INCOMING_RING = (byte) 0xF5;
+
+    /**
+     * 接听来电通话
+     */
+    byte MJ_BOX_KEYCODE_ANSWER_INCOMING_CALL = (byte) 0xF4;
+
+    /**
+     * 挂断
+     */
+    byte MJ_BOX_KEYCODE_HANG_UP = (byte) 0xF3;
+
+    /**
+     * 拨打电话
+     */
+    byte MJ_BOX_KEYCODE_CALL_UP = (byte) 0xF2;
+
+    /**
+     * 喵驾发送至底层暂停
+     */
+    byte MIUDRIVE_TO_VEHICLE_PAUSE = (byte) 0xF1;
+
+    /**
+     * 模拟触摸
+     */
+    byte MIUDRIVE_ANALOG_TOUCH= (byte) 0xF0;
 
     /**
      * 关闭键盘下发消息
@@ -465,20 +446,19 @@ public interface BottomConfigure {
     byte MJ_BOX_OPEN_KEYBOARD_ISSUED_NEWS = (byte) 0xEE;
 
     /**
-     * 关闭鼠标下发事件
+     * 模拟按键
      */
-    byte MJ_BOX_CLOSE_MOUSE_ISSUED_NEWS = (byte) 0xEB;
+    byte MJ_BOX_SIMULATE_KEYSTROKES = (byte) 0xED;
 
     /**
      * 开启鼠标下发事件
      */
     byte MJ_BOX_OPEN_MOUSE_ISSUED_NEWS = (byte) 0xEC;
 
-
     /**
-     * 模拟按键
+     * 关闭鼠标下发事件
      */
-    byte MJ_BOX_SIMULATE_KEYSTROKES = (byte) 0xED;
+    byte MJ_BOX_CLOSE_MOUSE_ISSUED_NEWS = (byte) 0xEB;
 
     /**
      * 打开返回键拦截事件
@@ -491,8 +471,44 @@ public interface BottomConfigure {
     byte MJ_BOX_CLOSE_BACK_INTERCEPT = (byte) 0xE9;
 
     /**
+     * 电话名称
+     */
+    byte MJ_BOX_KEYCODE_CALLPHONE_NAME = (byte) 0xE8;
+
+    /**
      * 执行adb命令
      */
     byte MJ_BOX_EXECUTE_ADB_COMMAND = (byte) 0xE7;
+
+
+
+
+
+
+    /**********************TODO 发送给底层消息时，携带的数据参数***************************/
+    /**
+     * 立即开始播放更新
+     */
+    byte MJ_BOX_KEYCODE_START_NOW_PLAYING_UPDATES = (byte) 0x00;
+
+    /**
+     * 立即停止播放更新
+     */
+    byte MJ_BOX_KEYCODE_STOP_NOW_PLAYING_UPDATES = (byte) 0x02;
+
+    /**
+     * 语音识别结束声音和屏幕焦点恢复以前状态
+     */
+    byte MIUDRIVE_NO_HANDLE_SOUND_FOCUS = (byte) 0x00;
+
+    /**
+     * 语音识别结束声音焦点在喵驾，屏幕恢复以前状态
+     */
+    byte MIUDRIVE_NEED_HANDLE_SOUND_FOCUS = (byte) 0x01;
+
+    /**
+     * 语音识别结束屏幕焦点在喵驾，声音恢复以前状态
+     */
+    byte INTERFACE_SWITCH_MIUDRIVE = (byte) 0x02;
 
 }

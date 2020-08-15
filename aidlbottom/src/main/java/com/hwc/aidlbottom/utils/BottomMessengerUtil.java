@@ -125,8 +125,10 @@ public class BottomMessengerUtil extends BaseProcessUtil {
                             } else {
                                 onBottomMessageListener.onMessage(messageBean.bottomBytes);
                             }
+                            org.qiyi.video.svg.log.Logger.d("messageBean: " + messageBean);
+                        } else {
+                            org.qiyi.video.svg.log.Logger.d("onBottomMessageListener is null");
                         }
-                        org.qiyi.video.svg.log.Logger.d("messageBean: " + messageBean);
                     }
 
                     @Override
