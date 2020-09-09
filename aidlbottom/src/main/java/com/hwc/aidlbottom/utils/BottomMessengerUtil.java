@@ -101,13 +101,13 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
             return false;
         }
+        onBottomMessageListenerMap.put(timeTag, onBottomMessageListener);
         RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
         IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
         if (null == iBottomMessenger) {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
-        onBottomMessageListenerMap.put(timeTag, onBottomMessageListener);
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
