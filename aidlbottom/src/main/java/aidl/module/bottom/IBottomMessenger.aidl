@@ -19,11 +19,11 @@ interface IBottomMessenger {
 
     boolean isStartSystemMic();
 
+    boolean setLearningButtons(boolean isLearningButtons);
+
     boolean setSaveMicPort(boolean isSaveMicPort);
 
     boolean isConnectOriginalVehicleSuccess();
-
-    boolean setStartSystemMic(boolean isStartSystemMic);
 
     byte[] getCarModel();
 }
