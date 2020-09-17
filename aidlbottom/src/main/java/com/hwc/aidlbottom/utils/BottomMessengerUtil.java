@@ -327,13 +327,13 @@ public class BottomMessengerUtil extends BaseProcessUtil {
 
 
     /**
-     * 设置按键学习
-     * true为打开
-     * false为关闭
+     * 设置是否保存麦克风端口
+     * true为保存
+     * false不保存
      *
      * @return
      */
-    public boolean setLearningButtons(boolean isLearningButtons) {
+    public boolean setSaveMicPort(boolean isSaveMicPort) {
         if (null == context) {
             Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
             return false;
@@ -347,7 +347,37 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
-                buyApple.setLearningButtons(isLearningButtons);
+                buyApple.setSaveMicPort(isSaveMicPort);
+                return true;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 设置是否
+     * true为打开
+     * false为关闭
+     *
+     * @return
+     */
+    public boolean setStartSystemMic(boolean isStartSystemMic) {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return false;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return false;
+        }
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.setStartSystemMic(isStartSystemMic);
                 return true;
             } catch (RemoteException e) {
                 e.printStackTrace();
