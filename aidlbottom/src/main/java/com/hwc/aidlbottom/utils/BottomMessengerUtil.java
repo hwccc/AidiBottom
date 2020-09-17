@@ -108,6 +108,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        Log.d(TAG, "register");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -161,6 +162,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return -1;
         }
+        Log.d(TAG, "getDidiPlayVersion");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -178,6 +180,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean unregister(OnBottomMessageListener onBottomMessageListener) {
+        Log.d(TAG, "unregister");
         if (onBottomMessageListener != null) {
             long timeTag = 0;
             Iterator<Map.Entry<Long, OnBottomMessageListener>> it = onBottomMessageListenerMap.entrySet().iterator();
@@ -231,6 +234,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        Log.d(TAG, "send");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -260,6 +264,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        Log.d(TAG, "isStartSystemMic");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -287,6 +292,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        Log.d(TAG, "switchMicrophoneChannel");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -314,6 +320,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        Log.d(TAG, "restoreChannel");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -344,6 +351,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        Log.d(TAG, "setLearningButtons isLearningButtons：" + isLearningButtons);
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -375,6 +383,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        Log.d(TAG, "setSaveMicPort isSaveMicPort：" + isSaveMicPort);
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -403,6 +412,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return false;
         }
+        Log.d(TAG, "isConnectOriginalVehicleSuccess");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -431,6 +441,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return null;
         }
+        Log.d(TAG, "getCarModel");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
@@ -446,6 +457,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * 执行adb命令
      */
     public void sendAdbCommand(String adbCommand) {
+        Log.d(TAG, "sendAdbCommand: " + adbCommand);
         if (!TextUtils.isEmpty(adbCommand)) {
             BottomMessage bottomMessage = new BottomMessage();
             bottomMessage.msgType = BottomConfigure.TYPE_EXECUTE_ADB_COMMAND;
@@ -460,6 +472,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @param bottomBytes
      */
     public void sendNativeSocketData(byte[] bottomBytes) {
+        Log.d(TAG, "sendNativeSocketData: " + bottomBytes);
         if (bottomBytes != null) {
             BottomMessage bottomMessage = new BottomMessage();
             bottomMessage.bottomBytes = bottomBytes;
@@ -471,6 +484,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * 发送按键事件至底层
      */
     public void sendKeystrokesData(int keyCode) {
+        Log.d(TAG, "sendKeystrokesData: " + keyCode);
         BottomMessage bottomMessage = new BottomMessage();
         bottomMessage.msgType = BottomConfigure.TYPE_BUTTONS;
         bottomMessage.bottomByte = (byte) keyCode;
@@ -483,6 +497,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @param bottomByte
      */
     public void sendStopMicData(byte bottomByte) {
+        Log.d(TAG, "sendStopMicData: " + bottomByte);
         BottomMessage bottomMessage = new BottomMessage();
         bottomMessage.msgType = BottomConfigure.TYPE_STOP_MIC;
         bottomMessage.bottomByte = bottomByte;
@@ -495,6 +510,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @param bottomByte
      */
     public void sendSocketData(byte bottomByte) {
+        Log.d(TAG, "sendSocketData: " + bottomByte);
         BottomMessage bottomMessage = new BottomMessage();
         bottomMessage.bottomByte = bottomByte;
         send(bottomMessage);
