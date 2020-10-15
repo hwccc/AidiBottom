@@ -35,4 +35,13 @@ public interface OnBottomMessageListener {
 
     }
 
+    /**
+     * 专车专用消息
+     *
+     * @param isPrivateCarSpecialInterface 是否在专车专用界面
+     */
+    default void onPrivateCarSpecial(boolean isPrivateCarSpecialInterface) {
+
+    }
+
 }

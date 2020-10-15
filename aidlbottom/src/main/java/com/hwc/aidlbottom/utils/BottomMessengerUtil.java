@@ -117,16 +117,25 @@ public class BottomMessengerUtil extends BaseProcessUtil {
                     @Override
                     public void onSucceed(Bundle result) {
                         MessageBean messageBean = (MessageBean) result.getSerializable("MessageBean");
-                        if (onBottomMessageListenerMap != null && onBottomMessageListenerMap.containsValue(onBottomMessageListener)
-                                && messageBean != null) {
-                            if (TextUtils.equals(BottomConfigure.TYPE_BUTTONS, messageBean.msgType)) {
-                                onBottomMessageListener.onButtonsMessage(messageBean.bottomBytes);
-                            } else if (TextUtils.equals(BottomConfigure.TYPE_BUTTONS_LEARNING, messageBean.msgType)) {
-                                onBottomMessageListener.onButtonsLearningMessage(messageBean.bottomBytes);
+                        if (onBottomMessageListenerMap != null && onBottomMessageListenerMap.containsValue(onBottomMessageListener)) {
+                            if (messageBean != null) {
+                                if (TextUtils.equals(BottomConfigure.TYPE_BUTTONS, messageBean.msgType)) {
+                                    onBottomMessageListener.onButtonsMessage(messageBean.bottomBytes);
+                                } else if (TextUtils.equals(BottomConfigure.TYPE_BUTTONS_LEARNING, messageBean.msgType)) {
+                                    onBottomMessageListener.onButtonsLearningMessage(messageBean.bottomBytes);
+                                } else {
+                                    onBottomMessageListener.onMessage(messageBean.bottomBytes);
+                                }
+                                org.qiyi.video.svg.log.Logger.d("messageBean: " + messageBean);
                             } else {
-                                onBottomMessageListener.onMessage(messageBean.bottomBytes);
+                                int isPrivateCarSpecialInterface = result.getInt("isPrivateCarSpecialInterface", -1);
+                                if (isPrivateCarSpecialInterface != -1) {
+                                    org.qiyi.video.svg.log.Logger.d("isPrivateCarSpecialInterface: " + isPrivateCarSpecialInterface);
+                                    onBottomMessageListener.onPrivateCarSpecial(isPrivateCarSpecialInterface == 1);
+                                }
                             }
-                            org.qiyi.video.svg.log.Logger.d("messageBean: " + messageBean);
+
+
                         } else {
                             org.qiyi.video.svg.log.Logger.d("onBottomMessageListener is null");
                         }
@@ -417,6 +426,62 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         if (null != buyApple) {
             try {
                 return buyApple.isConnectOriginalVehicleSuccess();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是否为专车专用
+     *
+     * @return
+     */
+    public boolean isCarSpecial() {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return false;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return false;
+        }
+        Log.d(TAG, "isCarSpecial");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                return buyApple.isCarSpecial();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是否在专车专用界面
+     *
+     * @return
+     */
+    public boolean isPrivateCarSpecialInterface() {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return false;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return false;
+        }
+        Log.d(TAG, "isPrivateCarSpecialInterface");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                return buyApple.isPrivateCarSpecialInterface();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

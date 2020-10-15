@@ -25,5 +25,9 @@ interface IBottomMessenger {
 
     boolean isConnectOriginalVehicleSuccess();
 
+    boolean isCarSpecial();
+
+    boolean isPrivateCarSpecialInterface();
+
     byte[] getCarModel();
 }
