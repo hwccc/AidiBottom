@@ -30,4 +30,6 @@ interface IBottomMessenger {
     boolean isPrivateCarSpecialInterface();
 
     byte[] getCarModel();
+
+    int getAppType();
 }

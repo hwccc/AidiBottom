@@ -518,6 +518,36 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         return null;
     }
 
+
+    /**
+     * 获取apk的类型
+     *
+     * @return
+     */
+    public int getAppType() {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return -1;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return -1;
+        }
+        Log.d(TAG, "getAppType");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                return buyApple.getAppType();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return -1;
+    }
+
+
     /**
      * 执行adb命令
      */
