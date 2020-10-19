@@ -3,7 +3,7 @@ package com.hwc.aidlbottom.config;
 /**
  * 车品牌标记
  */
-public interface AppTypeConfig {
+public interface AppCarModelConfig {
     //通用（全系通用
     int BOX_MODEL_TYPE_DEFAULT = 0;
     //奥迪

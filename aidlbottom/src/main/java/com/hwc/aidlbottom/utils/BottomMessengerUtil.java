@@ -520,11 +520,11 @@ public class BottomMessengerUtil extends BaseProcessUtil {
 
 
     /**
-     * 获取apk的类型
+     * 获取apk的车机兼容类型
      *
      * @return
      */
-    public int getAppType() {
+    public int getAppCarModel() {
         if (null == context) {
             Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
             return -1;
@@ -535,16 +535,45 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             Log.d(TAG, "iBottomMessenger is Null");
             return -1;
         }
-        Log.d(TAG, "getAppType");
+        Log.d(TAG, "getAppCarModel");
         IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
         if (null != buyApple) {
             try {
-                return buyApple.getAppType();
+                return buyApple.getAppCarModel();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
         return -1;
+    }
+
+
+    /**
+     * 获取apk的系统来源
+     *
+     * @return
+     */
+    public String getAppSystemSource() {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return null;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            return null;
+        }
+        Log.d(TAG, "getAppSystemSource");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                return buyApple.getAppSystemSource();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
 

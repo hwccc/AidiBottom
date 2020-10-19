@@ -31,5 +31,7 @@ interface IBottomMessenger {
 
     byte[] getCarModel();
 
-    int getAppType();
+    int getAppCarModel();
+
+    String getAppSystemSource();
 }
