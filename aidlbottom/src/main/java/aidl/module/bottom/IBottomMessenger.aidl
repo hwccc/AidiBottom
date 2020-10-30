@@ -9,6 +9,10 @@ interface IBottomMessenger {
 
     int unregister(long timeTag);
 
+    int registerMicStatus(long timeTag, IPCCallback callback);
+
+    int unregisterMicStatus(long timeTag);
+
     int send(in BottomMessage bottomMessage);
 
     int getDidiPlayVersion();

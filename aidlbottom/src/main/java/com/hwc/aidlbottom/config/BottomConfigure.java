@@ -8,7 +8,7 @@ public interface BottomConfigure {
     String TYPE_BUTTONS = "type_buttons";
 
     /**
-     * 按键类型
+     * 按键学习类型
      */
     String TYPE_BUTTONS_LEARNING = "type_buttons_learning";
 
@@ -433,7 +433,7 @@ public interface BottomConfigure {
     /**
      * 模拟触摸
      */
-    byte MIUDRIVE_ANALOG_TOUCH= (byte) 0xF0;
+    byte MIUDRIVE_ANALOG_TOUCH = (byte) 0xF0;
 
     /**
      * 关闭键盘下发消息

@@ -9,6 +9,7 @@ import android.util.Log;
 import com.hwc.aidlbottom.bean.MessageBean;
 import com.hwc.aidlbottom.config.BottomConfigure;
 import com.hwc.aidlbottom.listener.OnBottomMessageListener;
+import com.hwc.aidlbottom.listener.OnBottomMicListener;
 
 import org.qiyi.video.svg.Andromeda;
 import org.qiyi.video.svg.broadcast.BroadcastUtil;
@@ -32,6 +33,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
 
     private Map<Long, OnBottomMessageListener> onBottomMessageListenerMap;
 
+    private Map<Long, OnBottomMicListener> onBottomMicListenerMap;
+
     private volatile static BottomMessengerUtil instance;
 
     public static BottomMessengerUtil getInstance() {
@@ -47,6 +50,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
 
     private BottomMessengerUtil() {
         onBottomMessageListenerMap = new HashMap<>();
+        onBottomMicListenerMap = new HashMap<>();
     }
 
     @Override
@@ -66,6 +70,14 @@ public class BottomMessengerUtil extends BaseProcessUtil {
                         while (it.hasNext()) {
                             Map.Entry<Long, OnBottomMessageListener> entry = it.next();
                             register(entry.getKey(), entry.getValue());
+                        }
+                    }
+
+                    if (onBottomMicListenerMap != null) {
+                        Iterator<Map.Entry<Long, OnBottomMicListener>> it = onBottomMicListenerMap.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry<Long, OnBottomMicListener> entry = it.next();
+                            registerMicStatus(entry.getKey(), entry.getValue());
                         }
                     }
                 }
@@ -97,15 +109,9 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     private boolean register(long timeTag, final OnBottomMessageListener onBottomMessageListener) {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
         onBottomMessageListenerMap.put(timeTag, onBottomMessageListener);
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "register");
@@ -154,21 +160,14 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         return false;
     }
 
-
     /**
      * 查询获取didiplay版本号
      *
      * @return
      */
     public int getDidiPlayVersion() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return -1;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return -1;
         }
         Log.d(TAG, "getDidiPlayVersion");
@@ -200,14 +199,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
                     it.remove();
                 }
             }
-            if (null == context) {
-                Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-                return false;
-            }
-            RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-            IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-            if (null == iBottomMessenger) {
-                Log.d(TAG, "iBottomMessenger is Null");
+            IBinder iBottomMessenger = checkIsConnect();
+            if (iBottomMessenger == null) {
                 return false;
             }
             IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
@@ -223,7 +216,94 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         } else {
             return false;
         }
+    }
 
+    /**
+     * 注册底层底层麦克风消息
+     *
+     * @param onBottomMicListener
+     * @return
+     */
+    public boolean registerMicStatus(final OnBottomMicListener onBottomMicListener) {
+        return registerMicStatus(System.currentTimeMillis(), onBottomMicListener);
+    }
+
+
+    /**
+     * 注册底层麦克风消息
+     *
+     * @param onBottomMicListener
+     * @return
+     */
+    private boolean registerMicStatus(long timeTag, final OnBottomMicListener onBottomMicListener) {
+        onBottomMicListenerMap.put(timeTag, onBottomMicListener);
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
+            return false;
+        }
+        Log.d(TAG, "register");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.registerMicStatus(timeTag, new BaseCallback() {
+
+                    @Override
+                    public void onSucceed(Bundle result) {
+                        boolean isOpen = result.getBoolean("isOpen");
+                        if (onBottomMicListenerMap != null && onBottomMicListenerMap.containsValue(onBottomMicListener)) {
+                            onBottomMicListener.onBottomMicStatus(isOpen);
+                            org.qiyi.video.svg.log.Logger.d("isOpen: " + isOpen);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String reason) {
+                        org.qiyi.video.svg.log.Logger.e("buyAppleOnNet failed,reason:" + reason);
+                    }
+                });
+                return true;
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 注销麦克风消息
+     *
+     * @param onBottomMicListener
+     * @return
+     */
+    public boolean unregisterMicStatus(OnBottomMicListener onBottomMicListener) {
+        Log.d(TAG, "unregisterMicStatus");
+        if (onBottomMicListener != null) {
+            long timeTag = 0;
+            Iterator<Map.Entry<Long, OnBottomMicListener>> it = onBottomMicListenerMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Long, OnBottomMicListener> entry = it.next();
+                if (entry.getValue() == onBottomMicListener) {
+                    timeTag = entry.getKey();
+                    it.remove();
+                }
+            }
+            IBinder iBottomMessenger = checkIsConnect();
+            if (iBottomMessenger == null) {
+                return false;
+            }
+            IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+            if (null != buyApple) {
+                try {
+                    buyApple.unregisterMicStatus(timeTag);
+                    return true;
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -233,14 +313,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean send(BottomMessage bottomMessage) {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "send");
@@ -263,14 +337,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean isStartSystemMic() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "isStartSystemMic");
@@ -291,14 +359,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean switchMicrophoneChannel() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "switchMicrophoneChannel");
@@ -319,14 +381,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean restoreChannel() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "restoreChannel");
@@ -350,14 +406,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean setLearningButtons(boolean isLearningButtons) {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "setLearningButtons isLearningButtons：" + isLearningButtons);
@@ -382,14 +432,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean setSaveMicPort(boolean isSaveMicPort) {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "setSaveMicPort isSaveMicPort：" + isSaveMicPort);
@@ -411,14 +455,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean isConnectOriginalVehicleSuccess() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "isConnectOriginalVehicleSuccess");
@@ -439,14 +477,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean isCarSpecial() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "isCarSpecial");
@@ -467,14 +499,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean isPrivateCarSpecialInterface() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return false;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return false;
         }
         Log.d(TAG, "isPrivateCarSpecialInterface");
@@ -496,14 +522,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public byte[] getCarModel() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return null;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return null;
         }
         Log.d(TAG, "getCarModel");
@@ -525,14 +545,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public int getAppCarModel() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return -1;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return -1;
         }
         Log.d(TAG, "getAppCarModel");
@@ -554,14 +568,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public String getAppSystemSource() {
-        if (null == context) {
-            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
-            return null;
-        }
-        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
-        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
-        if (null == iBottomMessenger) {
-            Log.d(TAG, "iBottomMessenger is Null");
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
             return null;
         }
         Log.d(TAG, "getAppSystemSource");
@@ -574,6 +582,20 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             }
         }
         return null;
+    }
+
+    private IBinder checkIsConnect() {
+        if (null == context) {
+            Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
+            return null;
+        }
+        RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
+        IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
+        if (null == iBottomMessenger) {
+            Log.d(TAG, "iBottomMessenger is Null");
+            BottomServiceUtil.getInstance().startService(context);
+        }
+        return iBottomMessenger;
     }
 
 
