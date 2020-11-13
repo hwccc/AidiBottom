@@ -10,6 +10,7 @@ import com.hwc.aidlbottom.bean.MessageBean;
 import com.hwc.aidlbottom.config.BottomConfigure;
 import com.hwc.aidlbottom.listener.OnBottomMessageListener;
 import com.hwc.aidlbottom.listener.OnBottomMicListener;
+import com.hwc.aidlbottom.listener.OnMessageListener;
 
 import org.qiyi.video.svg.Andromeda;
 import org.qiyi.video.svg.broadcast.BroadcastUtil;
@@ -37,6 +38,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
 
     private Map<Long, OnBottomMicListener> onBottomMicListenerMap;
 
+    private Map<Long, OnMessageListener> onMessageListenerMap;
+
     /**
      * 异常是否重新发送数据
      */
@@ -60,6 +63,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
     private BottomMessengerUtil() {
         onBottomMessageListenerMap = new HashMap<>();
         onBottomMicListenerMap = new HashMap<>();
+        onMessageListenerMap = new HashMap<>();
         linkedBlockingQueue = new LinkedBlockingQueue<>();
     }
 
@@ -88,6 +92,13 @@ public class BottomMessengerUtil extends BaseProcessUtil {
                         while (it.hasNext()) {
                             Map.Entry<Long, OnBottomMicListener> entry = it.next();
                             registerMicStatus(entry.getKey(), entry.getValue());
+                        }
+                    }
+                    if (onMessageListenerMap != null) {
+                        Iterator<Map.Entry<Long, OnMessageListener>> it = onMessageListenerMap.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry<Long, OnMessageListener> entry = it.next();
+                            registerMessage(entry.getKey(), entry.getValue());
                         }
                     }
                     if (isErrorResend) {
@@ -766,6 +777,94 @@ public class BottomMessengerUtil extends BaseProcessUtil {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 注册消息
+     *
+     * @param onMessageListener
+     * @return
+     */
+    public boolean registerMessage(final OnMessageListener onMessageListener) {
+        return registerMessage(System.currentTimeMillis(), onMessageListener);
+    }
+
+    /**
+     * 注册消息
+     *
+     * @param onMessageListener
+     * @return
+     */
+    private boolean registerMessage(long timeTag, OnMessageListener onMessageListener) {
+        onMessageListenerMap.put(timeTag, onMessageListener);
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
+            return false;
+        }
+        Log.d(TAG, "registerMessage");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.registerMicStatus(timeTag, new BaseCallback() {
+
+                    @Override
+                    public void onSucceed(Bundle build) {
+                        String message = build.getString("message");
+                        if (onMessageListenerMap != null && onMessageListenerMap.containsValue(onMessageListener)) {
+                            onMessageListener.onMessage(message);
+                            org.qiyi.video.svg.log.Logger.d("message: " + message);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String reason) {
+                        org.qiyi.video.svg.log.Logger.e("buyAppleOnNet failed,reason:" + reason);
+                    }
+                });
+                return true;
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 注销麦克风消息
+     *
+     * @param onMessageListener
+     * @return
+     */
+    public boolean unregisterMessage(OnMessageListener onMessageListener) {
+        Log.d(TAG, "unregisterMessage");
+        if (onMessageListener != null) {
+            long timeTag = 0;
+            Iterator<Map.Entry<Long, OnMessageListener>> it = onMessageListenerMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Long, OnMessageListener> entry = it.next();
+                if (entry.getValue() == onMessageListener) {
+                    timeTag = entry.getKey();
+                    it.remove();
+                }
+            }
+            IBinder iBottomMessenger = checkIsConnect();
+            if (iBottomMessenger == null) {
+                return false;
+            }
+            IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+            if (null != buyApple) {
+                try {
+                    buyApple.unregisterMessage(timeTag);
+                    return true;
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
     }
 
     public void setErrorResend(boolean errorResend) {

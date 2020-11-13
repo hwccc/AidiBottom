@@ -42,4 +42,8 @@ interface IBottomMessenger {
     String getMessage();
 
     boolean setMessage(in String message);
+
+    int registerMessage(long timeTag, IPCCallback callback);
+
+    int unregisterMessage(long timeTag);
 }
