@@ -22,6 +22,8 @@ import org.qiyi.video.svg.utils.BaseProcessUtil;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import aidl.module.bottom.BottomMessage;
 import aidl.module.bottom.IBottomMessenger;
@@ -34,6 +36,13 @@ public class BottomMessengerUtil extends BaseProcessUtil {
     private Map<Long, OnBottomMessageListener> onBottomMessageListenerMap;
 
     private Map<Long, OnBottomMicListener> onBottomMicListenerMap;
+
+    /**
+     * 异常是否重新发送数据
+     */
+    private boolean isErrorResend;
+
+    private BlockingQueue<BottomMessage> linkedBlockingQueue;
 
     private volatile static BottomMessengerUtil instance;
 
@@ -51,6 +60,7 @@ public class BottomMessengerUtil extends BaseProcessUtil {
     private BottomMessengerUtil() {
         onBottomMessageListenerMap = new HashMap<>();
         onBottomMicListenerMap = new HashMap<>();
+        linkedBlockingQueue = new LinkedBlockingQueue<>();
     }
 
     @Override
@@ -78,6 +88,14 @@ public class BottomMessengerUtil extends BaseProcessUtil {
                         while (it.hasNext()) {
                             Map.Entry<Long, OnBottomMicListener> entry = it.next();
                             registerMicStatus(entry.getKey(), entry.getValue());
+                        }
+                    }
+                    if (isErrorResend) {
+                        if (linkedBlockingQueue != null) {
+                            BottomMessage bottomMessage;
+                            while ((bottomMessage = linkedBlockingQueue.poll()) != null) {
+                                reSend(bottomMessage);
+                            }
                         }
                     }
                 }
@@ -313,8 +331,48 @@ public class BottomMessengerUtil extends BaseProcessUtil {
      * @return
      */
     public boolean send(BottomMessage bottomMessage) {
+        Log.d(TAG, "send bottomMessage: " + bottomMessage);
+        if (isErrorResend) {
+            linkedBlockingQueue.offer(bottomMessage);
+        }
         IBinder iBottomMessenger = checkIsConnect();
         if (iBottomMessenger == null) {
+            return false;
+        }
+        Log.d(TAG, "send");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                if (isErrorResend) {
+                    bottomMessage = linkedBlockingQueue.poll();
+                }
+                if (bottomMessage != null) {
+                    buyApple.send(bottomMessage);
+                }
+                return true;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                if (isErrorResend) {
+                    linkedBlockingQueue.offer(bottomMessage);
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 重新发送消息
+     *
+     * @param bottomMessage
+     * @return
+     */
+    private boolean reSend(BottomMessage bottomMessage) {
+        Log.d(TAG, "send bottomMessage: " + bottomMessage);
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
+            if (isErrorResend) {
+                linkedBlockingQueue.offer(bottomMessage);
+            }
             return false;
         }
         Log.d(TAG, "send");
@@ -327,9 +385,11 @@ public class BottomMessengerUtil extends BaseProcessUtil {
                 e.printStackTrace();
             }
         }
+        if (isErrorResend) {
+            linkedBlockingQueue.offer(bottomMessage);
+        }
         return false;
     }
-
 
     /**
      * 系统是否启动麦克风消息
@@ -660,5 +720,55 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         BottomMessage bottomMessage = new BottomMessage();
         bottomMessage.bottomByte = bottomByte;
         send(bottomMessage);
+    }
+
+    /**
+     * 获取消息
+     *
+     * @return
+     */
+    public String getMessage() {
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
+            return null;
+        }
+        Log.d(TAG, "getMessage");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                return buyApple.getMessage();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 设置消息
+     *
+     * @param message
+     * @return
+     */
+    public boolean setMessage(String message) {
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
+            return false;
+        }
+        Log.d(TAG, "setMessage message：" + message);
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.setMessage(message);
+                return true;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public void setErrorResend(boolean errorResend) {
+        isErrorResend = errorResend;
     }
 }

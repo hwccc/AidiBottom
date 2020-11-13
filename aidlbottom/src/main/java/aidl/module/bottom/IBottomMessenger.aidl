@@ -38,4 +38,8 @@ interface IBottomMessenger {
     int getAppCarModel();
 
     String getAppSystemSource();
+
+    String getMessage();
+
+    boolean setMessage(in String message);
 }
