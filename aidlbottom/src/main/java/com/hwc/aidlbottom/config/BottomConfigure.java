@@ -357,6 +357,11 @@ public interface BottomConfigure {
     byte MJ_BOX_GET_DIDIPLAY_VERSION = (byte) 0x32;
 
     /**
+     * 打开特定APK
+     */
+    byte MJ_BOX_OPEN_SPECIFIC_APK = (byte) 0x33;
+
+    /**
      * 车机型号
      */
     byte MJ_BOX_FOCUS_KEYCODE_CAR_MODE = (byte) 0xFD;
@@ -480,9 +485,20 @@ public interface BottomConfigure {
      */
     byte MJ_BOX_EXECUTE_ADB_COMMAND = (byte) 0xE7;
 
+    /**
+     * 发送标准键
+     */
+    byte MJ_BOX_SEND_STANDARD_KEY = (byte) 0xDF;
 
+    /**
+     * 设置是否由didiplay自动计算dpi
+     */
+    byte MJ_BOX_SET_AUTOMATICALLY_CALCULATE_DPI = (byte) 0xDE;
 
-
+    /**
+     * 设置采样率
+     */
+    byte MJ_BOX_SET_SAMPLING_RATE = (byte) 0xDD;
 
 
     /**********************TODO 发送给底层消息时，携带的数据参数***************************/
