@@ -500,6 +500,11 @@ public interface BottomConfigure {
      */
     byte MJ_BOX_SET_SAMPLING_RATE = (byte) 0xDD;
 
+    /**
+     * 设置摇杆控制需要转成10001-10004消息
+     */
+    byte MJ_BOX_JOYSTICK_CONTROL_NEED_CHANGE = (byte) 0xDC;
+
 
     /**********************TODO 发送给底层消息时，携带的数据参数***************************/
     /**
