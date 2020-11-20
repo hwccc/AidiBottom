@@ -362,6 +362,11 @@ public interface BottomConfigure {
     byte MJ_BOX_OPEN_SPECIFIC_APK = (byte) 0x33;
 
     /**
+     * 屏幕信息
+     */
+    byte MJ_BOX_SCREEN_INFO = (byte) 0x34;
+
+    /**
      * 车机型号
      */
     byte MJ_BOX_FOCUS_KEYCODE_CAR_MODE = (byte) 0xFD;
