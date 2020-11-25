@@ -45,7 +45,10 @@ public interface BoxCarModelConfig {
     int BOX_MODEL_TYPE_FOREIGN_STYLE_THREE = 42;//国外样式三（大众为主， 大众+其它（排除41））
     int BOX_MODEL_TYPE_FOREIGN_STYLE_FOUR = 44;//国外样式四（丰田为主，丰田/本田/日产/大众/福特/标致/雪佛兰/别克/现代/斯柯达）
     int BOX_MODEL_TYPE_FOREIGN_STYLE_FIVES = 45;//国外样式五（奔驰为主，奔驰/奥迪/保时捷/VOLVO/凯迪拉克）
+    int BOX_MODEL_TYPE_FOREIGN_STYLE_SIX = 81;//国外样式六（宝马为基准，排除奔驰、奥迪、大众、保时捷）
 
-    int BOX_MODEL_TYPE_DOMESTIC_STYLE_ONE = 81;//国内样式一（宝马为基准，排除奔驰、奥迪、大众、保时捷）
+
+    int BOX_MODEL_TYPE_DOMESTIC_STYLE_ONE = 46;//国内样式一（宝马为基准，排除奔驰、奥迪、大众、保时捷）,跟国外样式六一样
+
 
 }
