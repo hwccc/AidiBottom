@@ -659,6 +659,8 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         if (null == context) {
             Log.d(TAG, "BottomMessengerUtil Not init Context Is Null");
             return null;
+        } else {
+            Log.d(TAG, "context: " + context.getPackageName());
         }
         RemoteTransfer.getInstance().setCurrentAuthority(DispatcherConstants.AUTHORITY_BOTTOM_MESSAGE);
         IBinder iBottomMessenger = Andromeda.with(context).getRemoteService(IBottomMessenger.class);
