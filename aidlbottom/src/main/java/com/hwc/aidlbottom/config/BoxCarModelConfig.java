@@ -1,7 +1,7 @@
 package com.hwc.aidlbottom.config;
 
 /**
- * 车品牌标记
+ * 车SN标记
  */
 public interface BoxCarModelConfig {
     int BOX_MODEL_TYPE_DEFAULT = 88;//通用（全系通用
