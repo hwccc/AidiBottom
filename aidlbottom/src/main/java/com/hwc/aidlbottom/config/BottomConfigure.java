@@ -367,6 +367,11 @@ public interface BottomConfigure {
     byte MJ_BOX_SCREEN_INFO = (byte) 0x34;
 
     /**
+     * 静音按键
+     */
+    byte MJ_BOX_FOCUS_KEYCODE_MUTE = (byte) 0x35;
+
+    /**
      * 车机型号
      */
     byte MJ_BOX_FOCUS_KEYCODE_CAR_MODE = (byte) 0xFD;
