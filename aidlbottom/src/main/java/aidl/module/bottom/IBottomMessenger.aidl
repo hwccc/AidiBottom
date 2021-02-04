@@ -1,6 +1,7 @@
 // IBottomMessenger.aidl
 package aidl.module.bottom;
 import aidl.module.bottom.BottomMessage;
+import aidl.module.bottom.MediaItem;
 import org.qiyi.video.svg.IPCCallback;
 
 interface IBottomMessenger {
@@ -46,4 +47,6 @@ interface IBottomMessenger {
     int registerMessage(long timeTag, IPCCallback callback);
 
     int unregisterMessage(long timeTag);
+
+    int sendMedia(in MediaItem mediaItem);
 }

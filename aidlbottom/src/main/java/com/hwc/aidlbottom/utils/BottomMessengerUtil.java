@@ -28,6 +28,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import aidl.module.bottom.BottomMessage;
 import aidl.module.bottom.IBottomMessenger;
+import aidl.module.bottom.MediaItem;
 
 /**
  * @author hwc
@@ -872,4 +873,29 @@ public class BottomMessengerUtil extends BaseProcessUtil {
     public void setErrorResend(boolean errorResend) {
         isErrorResend = errorResend;
     }
+
+
+    /**
+     * 发送媒体信息数据
+     *
+     * @return
+     */
+    public boolean sendMedia(MediaItem mediaItem) {
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null || mediaItem == null) {
+            return false;
+        }
+        Log.d(TAG, "sendMedia mediaItem: " + mediaItem.toString());
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                buyApple.sendMedia(mediaItem);
+                return true;
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return false;
+    }
+
 }
