@@ -898,4 +898,50 @@ public class BottomMessengerUtil extends BaseProcessUtil {
         return false;
     }
 
+
+    /**
+     * 查询获取didiw2w版本号
+     *
+     * @return
+     */
+    public int getDidiW2wVersion() {
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
+            return -1;
+        }
+        Log.d(TAG, "getDidiW2wVersion");
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                return buyApple.getDidiW2wVersion();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * 处理消息
+     *
+     * @param message
+     * @return
+     */
+    public String handleMessage(String message) {
+        IBinder iBottomMessenger = checkIsConnect();
+        if (iBottomMessenger == null) {
+            return null;
+        }
+        Log.d(TAG, "handleMessage message：" + message);
+        IBottomMessenger buyApple = IBottomMessenger.Stub.asInterface(iBottomMessenger);
+        if (null != buyApple) {
+            try {
+                return buyApple.handleMessage(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

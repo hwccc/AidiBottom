@@ -376,6 +376,11 @@ public interface BottomConfigure {
      */
     byte MJ_BOX_FOCUS_KEYCODE_CAR_MODE = (byte) 0xFD;
 
+    /**
+     * 获取didiw2w版本号
+     */
+    byte MJ_BOX_GET_DIDIW2W_VERSION = (byte) 0x36;
+
 
     /******************************** TODO apk-->didiplay******************************/
 

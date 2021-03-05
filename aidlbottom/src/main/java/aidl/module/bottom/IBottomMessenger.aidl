@@ -49,4 +49,8 @@ interface IBottomMessenger {
     int unregisterMessage(long timeTag);
 
     int sendMedia(in MediaItem mediaItem);
+
+    int getDidiW2wVersion();
+
+    String handleMessage(in String message);
 }
