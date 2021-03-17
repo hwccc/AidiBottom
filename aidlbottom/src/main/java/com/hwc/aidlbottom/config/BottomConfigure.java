@@ -520,6 +520,15 @@ public interface BottomConfigure {
      */
     byte MJ_BOX_JOYSTICK_CONTROL_NEED_CHANGE = (byte) 0xDC;
 
+    /**
+     * 无线CarPlay状态控制
+     * 后面一个字节携带的参数：
+     * 0x00:生成data/local/tmp/.carplay_enable文件并重启车盒
+     * 0x01:删除data/local/tmp/.carplay_enable文件
+     * 0x02:生成data/local/tmp/.carplay_enable文件
+     */
+    byte MJ_BOX_CAR_PLAY_STATE = (byte) 0xDB;
+
 
     /**********************TODO 发送给底层消息时，携带的数据参数***************************/
     /**
