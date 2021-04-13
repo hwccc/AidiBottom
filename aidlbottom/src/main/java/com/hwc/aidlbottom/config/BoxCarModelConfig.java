@@ -50,5 +50,7 @@ public interface BoxCarModelConfig {
 
     int BOX_MODEL_TYPE_DOMESTIC_STYLE_ONE = 46;//国内样式一（宝马为基准，排除奔驰、奥迪、大众、保时捷）,跟国外样式六一样
 
+    int BOX_MODEL_TYPE_SUNPLUS = 47; //卓依达解码器专用
+
 
 }
