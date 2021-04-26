@@ -64,4 +64,6 @@ public interface AppCarModelConfig {
     int BOX_MODEL_TYPE_BINLI = 28;
     //林肯
     int BOX_MODEL_TYPE_LINKEN = 29;
+    //卓伊达解码器版本
+    int BOX_MODEL_TYPE_ZOIDA_DECODER = 30;
 }
