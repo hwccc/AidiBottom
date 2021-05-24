@@ -529,6 +529,10 @@ public interface BottomConfigure {
      */
     byte MJ_BOX_CAR_PLAY_STATE = (byte) 0xDB;
 
+    /**
+     * 响铃状态
+     */
+    byte MJ_BOX_RINGING_STATUS = (byte) 0xDA;
 
     /**********************TODO 发送给底层消息时，携带的数据参数***************************/
     /**
