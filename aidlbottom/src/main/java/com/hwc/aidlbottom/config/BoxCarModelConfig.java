@@ -52,7 +52,7 @@ public interface BoxCarModelConfig {
 
     int BOX_MODEL_TYPE_SUNPLUS = 47; //卓依达解码器专用
     int BOX_MODEL_TYPE_DOMESTIC_STYLE_TWO = 48; //国内样式二 （大众为基准，排除奔驰、奥迪、沃尔沃、凯迪拉克、路虎、保时捷）
-
+    int BOX_MODEL_TYPE_DOMESTIC_STYLE_THREE = 49; //国内样式三 （通用、电视盒子专用）
 
 
 }
